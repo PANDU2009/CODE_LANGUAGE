@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="password.js"></script>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CODE LANGUAGE TRANSLATOR</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      animation: fadeIn 1.5s ease;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #fff;
+      text-align: left;
+    }
+
+    textarea {
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      resize: none;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      outline: none;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    textarea:focus {
+      border-color: #2575fc;
+      box-shadow: 0 0 10px rgba(37, 117, 252, 0.4);
+    }
+
+    button {
+      padding: 15px 40px;
+      font-size: 1.3rem;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(145deg, #2575fc, #6a11cb);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background: linear-gradient(145deg, #6a11cb, #2575fc);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    #output {
+      margin-top: 20px;
+      padding: 25px;
+      border: 2px solid #444;
+      background-color: #fff;
+      color: #333;
+      border-radius: 15px;
+      min-height: 100px;
+      font-size: 1.2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-height: 200px;
+      overflow-y: auto;
+      animation: fadeIn 1.5s ease;
+    }
+
+    /* Copy Button */
+    #copyBtn {
+      margin-top: 15px;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border-radius: 25px;
+      background-color: #fff;
+      color: #ffffff;
+      border: 2px solid #2575fc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #copyBtn:hover {
+      background-color: #2575fc;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      button {
+        font-size: 1.2rem;
+        padding: 12px 25px;
+      }
+
+      textarea {
+        font-size: 1rem;
+        padding: 14px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+  <h1>CODE LANGUAGE TRANSLATOR</h1>
+  
+  <label for="inputText">Enter text:</label>
+  <textarea id="inputText" rows="6"></textarea>
+  
+  <button onclick="processText()">Translate</button>
+
+  <div id="output"></div>
+  <button id="copyBtn">Copy</button>
+</div>
+
+<script>
+  const code_map = {
+    'a': '🍎', 'b': '🍌', 'c': '🥐', 'd': '🍩', 'e': '🥚', 'f': '🍟',
+    'g': '🍇', 'h': '🧀', 'i': '🍦', 'j': '🔧', 'k': '🗝️', 'l': '📘',
+    'm': '🐢', 'n': '🦊', 'o': '🦉', 'p': '🍕', 'q': '🌋', 'r': '☀️',
+    's': '🧃', 't': '🌪️', 'u': '🌊', 'v': '🔋', 'w': '🌲', 'x': '📦',
+    'y': '🔐', 'z': '🎯',
+    'A': '.', 'B': '-', 'C': '|', 'D': '\\', 'E': '/', 'F': '+', 'G': 'x', 'H': 'o',
+    'I': '^', 'J': '_', 'K': '<', 'L': '>', 'M': '(', 'N': ')', 'O': '[', 'P': ']',
+    'Q': '{', 'R': '}', 'S': '*', 'T': '=', 'U': '~', 'V': "'", 'W': '"', 'X': '#',
+    'Y': '?', 'Z': '!',
+    '.': '😀', '?': '😁', ',': '😂', '-': '🤣', '!': '😃', '@': '😄',
+    '&': '😅', '*': '😆', '#': '😉', '(': '😊', ')': '😋', "'": '😎', '"': '😍',
+  };
+
+  const reverse_map = Object.fromEntries(
+    Object.entries(code_map).map(([k, v]) => [v, k])
+  );
+
+  function encodeToCodeLanguage(text) {
+    let encoded = '';
+    for (const char of text) {
+      encoded += code_map[char] || char;
+    }
+    return encoded;
+  }
+
+  function decodeFromCodeLanguage(text) {
+    let decoded = '';
+    const symbols = Object.keys(reverse_map).sort((a, b) => b.length - a.length);
+    let i = 0;
+
+    while (i < text.length) {
+      let matched = false;
+
+      for (const symbol of symbols) {
+        if (text.startsWith(symbol, i)) {
+          decoded += reverse_map[symbol];
+          i += symbol.length;
+          matched = true;
+          break;
+        }
+      }
+
+      if (!matched) {
+        decoded += text[i];
+        i++;
+      }
+    }
+
+    return decoded;
+  }
+
+  function isEncoded(text) {
+    const symbolSet = new Set(Object.values(code_map));
+    let matchCount = 0;
+
+    for (const char of text) {
+      if (symbolSet.has(char)) matchCount++;
+    }
+
+    return matchCount > text.length * 0.3;
+  }
+
+  function processText() {
+    const inputText = inputTextElement.value.trim();
+
+    if (isEncoded(inputText)) {
+      outputDiv.textContent = decodeFromCodeLanguage(inputText);
+    } else {
+      outputDiv.textContent = encodeToCodeLanguage(inputText);
+    }
+
+    inputTextElement.value = "";
+    inputTextElement.focus();
+    inputTextElement.style.height = 'auto';
+  }
+
+  const inputTextElement = document.getElementById("inputText");
+  const outputDiv = document.getElementById("output");
+
+  function autoResizeTextarea() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  }
+
+  inputTextElement.addEventListener('input', autoResizeTextarea);
+  inputTextElement.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      processText();
+    }
+  });
+
+  window.addEventListener('load', autoResizeTextarea.bind(inputTextElement));
+
+  const copyBtn = document.getElementById("copyBtn");
+
+  copyBtn.addEventListener("click", () => {
+    const textToCopy = outputDiv.textContent;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => {
+        copyBtn.textContent = "Copy";
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+    });
+  });
+</script>
+
+</body>
+</html>
